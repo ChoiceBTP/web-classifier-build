@@ -26,19 +26,20 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/process_urls", methods=["GET", "POST"])
+@app.route("/process_urls", methods=["POST"])
 def process_and_store():
     """Takes in json as :
 
     json : {
         "url_list" : ["1", "2", ...]
     }
-
+    Stores the urls and classes in the csv file
     Returns:
         _type_: _description_
     """
-    url_list = request.args.get("url_list")
+    url_list = request.json["url_list"]
 
+    print(url_list)
     url_classifier.classify_urls(url_list, debug=True, return_predictions=False)
     status = True
 
@@ -47,7 +48,9 @@ def process_and_store():
 
 @app.route("/get_url_classes", methods=["GET", "POST"])
 def get_url_classification():
-    url_list = request.args.get("url_list")
+
+    url_list = request.form.get("url_list")
+
     urls, classes = url_classifier.classify_urls(
         url_list, debug=True, return_predictions=True
     )

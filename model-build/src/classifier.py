@@ -93,8 +93,11 @@ class UrlClassifier:
         to_classify_urls = self._to_classify_urls(stored_urls, list_urls)
 
         # nothing to classify
-        if len(to_classify_urls) == 0 and return_predictions:
-            return stored_urls, stored_classes
+        if len(to_classify_urls) == 0:
+            if return_predictions:
+                return stored_urls, stored_classes
+            else:
+                return
 
         # we will need the dataframe now, with extracted text
         dataframe = self.extractor.extract(to_classify_urls, debug=debug)
