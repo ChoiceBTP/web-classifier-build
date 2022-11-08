@@ -15,6 +15,7 @@ class UrlClassifier:
         self.processor = TextProcessor()
         self.vectorizer = model_loader("vectorizer")
         self.model = model_loader("ml-model")
+
         self.class_mapping = {
             0: "Machine Learning ",
             1: "Data Structures and Algorithms",
@@ -77,7 +78,7 @@ class UrlClassifier:
 
         return class_labels
 
-    def classify_urls(self, list_urls, debug=False):
+    def classify_urls(self, list_urls, debug=False, return_predictions=False):
         """Main function called by the predict API end point
 
         Args:
@@ -92,7 +93,7 @@ class UrlClassifier:
         to_classify_urls = self._to_classify_urls(stored_urls, list_urls)
 
         # nothing to classify
-        if len(to_classify_urls) == 0:
+        if len(to_classify_urls) == 0 and return_predictions:
             return stored_urls, stored_classes
 
         # we will need the dataframe now, with extracted text
@@ -120,14 +121,15 @@ class UrlClassifier:
             print(to_classify_urls)
             print(predictions)
 
-        # store urls
-        final_urls = to_classify_urls
-        if len(stored_urls) > 0:
-            final_urls += stored_urls
+        if return_predictions:
+            # store urls
+            final_urls = to_classify_urls
+            if len(stored_urls) > 0:
+                final_urls += stored_urls
 
-        # store the classes
-        final_classes = predictions
-        if len(stored_classes) > 0:
-            final_classes += stored_classes
+            # store the classes
+            final_classes = predictions
+            if len(stored_classes) > 0:
+                final_classes += stored_classes
 
-        return final_urls, final_classes
+            return final_urls, final_classes

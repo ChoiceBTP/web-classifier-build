@@ -4,7 +4,7 @@ import pickle
 import nltk
 import pandas as pd
 
-DATA_PATH = "src/database/stored_urls.csv"
+DATA_PATH = "database/stored_urls.csv"
 
 
 def get_html(url):
@@ -56,7 +56,7 @@ def remove_stop_words(text):
 
 def model_loader(model_type):
     # model type is in [vectorizer, ml-model]
-    file_path = "src/models/" + model_type + ".pickle"
+    file_path = "models/" + model_type + ".pickle"
     with open(file_path, "rb") as pickle_file:
         model = pickle.load(pickle_file)
     return model
@@ -98,9 +98,7 @@ def store_classifications(urls, classes):
     # if we are just starting out
     if curr_dataframe.empty:
         curr_dataframe = pd.DataFrame(data=[], columns=["url", "class"])
-    print("Before storing : ")
-    print(urls)
-    print(classes)
+
     # make a dict of the urls, classes
     data_dict = {"url": urls, "class": classes}
     new_data = pd.DataFrame.from_dict(data=data_dict, orient="columns")
