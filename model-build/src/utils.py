@@ -65,6 +65,11 @@ def model_loader(model_type):
 def present_in_db(list_urls):
     dataframe = pd.read_csv(DATA_PATH, low_memory=False)
 
+    try:
+        dataframe.drop(["Unnamed: 0"], axis=1, inplace=True)
+    except:
+        pass
+
     if dataframe.empty:
         return [], []
 
@@ -75,12 +80,15 @@ def present_in_db(list_urls):
         url: class_label
         for url, class_label in zip(dataframe["url"], dataframe["class"])
     }
-    print(database)
+    # print(database)
     # get the stored urls
-    for url in list(list_urls):
-        if url in database:
-            stored_urls.append(url)
-            classes.append(database[url])
+    try:
+        for url in list(list_urls):
+            if url in database:
+                stored_urls.append(url)
+                classes.append(database[url])
+    except:
+        pass
 
     return stored_urls, classes
 
@@ -95,6 +103,11 @@ def store_classifications(urls, classes):
 
     curr_dataframe = pd.read_csv(DATA_PATH, low_memory=False)
 
+    try:
+        curr_dataframe.drop(["Unnamed: 0"], axis=1, inplace=True)
+    except:
+        pass
+
     # if we are just starting out
     if curr_dataframe.empty:
         curr_dataframe = pd.DataFrame(data=[], columns=["url", "class"])
@@ -104,7 +117,7 @@ def store_classifications(urls, classes):
     new_data = pd.DataFrame.from_dict(data=data_dict, orient="columns")
 
     # append the new data dict in to the dataframe
-    new_dataframe = pd.concat([curr_dataframe, new_data])
+    new_dataframe = pd.concat([curr_dataframe, new_data], ignore_index=True)
 
     # store it as the new data
     new_dataframe.to_csv(DATA_PATH)

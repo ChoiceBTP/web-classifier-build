@@ -24,17 +24,19 @@ class UrlClassifier:
             4: "Management",
         }
 
-        # if self._first_start():
+        if self._first_start():
 
-        #     # download required content
-        #     nltk.download("wordnet")
-        #     nltk.download("omw-1.4")
-        #     nltk.download("stopwords")
-        #     nltk.download("punkt")
+            # download required content
+            nltk.download("wordnet")
+            nltk.download("omw-1.4")
+            nltk.download("stopwords")
+            nltk.download("punkt")
 
-        #     # set started as false
-        #     started = {"start": False}
-        #     json.dump(started, open("first_start.json", "w"))
+            # set started as false
+            started = {"start": False}
+            json.dump(started, open("first_start.json", "w"))
+        else:
+            print("NLTK modules there!")
 
     # need to check out this path variable
     def _first_start(self):
@@ -126,13 +128,13 @@ class UrlClassifier:
 
         if return_predictions:
             # store urls
-            final_urls = to_classify_urls
+            final_urls = list(to_classify_urls)
             if len(stored_urls) > 0:
-                final_urls += stored_urls
+                final_urls += list(stored_urls)
 
             # store the classes
-            final_classes = predictions
+            final_classes = list(predictions)
             if len(stored_classes) > 0:
-                final_classes += stored_classes
+                final_classes += list(stored_classes)
 
             return final_urls, final_classes
